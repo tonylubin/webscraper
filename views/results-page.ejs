@@ -1,0 +1,48 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+      crossorigin="anonymous"
+    ></script>
+    <title>Money Saving App</title>
+  </head>
+  <body>
+    <div class="container-fluid" style="backdrop-filter: blur(6px);">
+      <header class="row mb-5 justify-content-center">
+        <h1 class="col-12 p-3 text-center display-2">The Money Saver Helper</h1>
+        <p class="col-6 mt-3 px-5 text-center text-secondary fs-5">
+          Congratulations, a price alert has been created and will be sent to <%= email %> 
+        </p>
+      </header>
+      <main class="row justify-content-center" style="height: 100%">
+        <h3 class="text-center text-primary">Here is your search result:</h3>
+        <img src="<%= fullProductObj.imageUrl %> " alt="image of <%= fullProductObj.name %> " style="height: 400px; width: 400px;"/>
+        <ul class="list-group align-items-center p-0">
+            <li class="col list-group-item border-0 text-decoration-underline fs-5" style="font-weight: 600;"><%= fullProductObj.name %> </li>
+            <li class="col list-group-item border-0 fw-bold text-primary fs-5">Current Price: <%= fullProductObj.currentPrice %> </li>
+            <% if (fullProductObj.previousPrice.length) { %>
+                <li class="col list-group-item border-0 text-danger text-decoration-line-through fs-5">Previous Price: <%= fullProductObj.previousPrice %></li> 
+            <% } %>
+            <% if (fullProductObj.offer.length) { %>
+                <li class="col list-group-item border border-danger text-danger">OFFER: <%= fullProductObj.offer %> </li>
+            <% } %>
+            <% if (fullProductObj.stockStatus === "Add to basket") { %>
+                <li class="col list-group-item border-0 text-success fs-5 fw-bold">In Stock</li>
+            <% } else  { %>
+                <li class="col list-group-item border-0">Not In Stock</li>
+            <% } %>
+        </ul>
+      </main>
+    </div>
+  </body>
+</html>
