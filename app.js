@@ -33,7 +33,10 @@ mongoose.connect(database,
 
 // connection error handling
 mongoose.connection.on('error', err => console.error('An error occurred in connection to' + err));
-mongoose.connection.on('connected', () => console.log('Successfully connected to mongoDb via mongoose'));
+mongoose.connection.on('connected', () => {
+    const dbName = mongoose.connection.name;
+    console.log(`Successfully connected via mongoose to the MongoDB database: ${dbName}`);
+});
 
 // STATIC FILES - shortened path link for ejs template files e.g: "images/facewash.jpeg"
 app.use(express.static(path.join(__dirname, 'public')));
@@ -42,14 +45,34 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 
 
-// HOME PAGE (GET REQUEST)
-app.get('/home', (req, res) => {
+// HOME PAGE
+app.get('/', (req, res) => {
     res.render('home.ejs')
 })
 
 //  UNSUBSCRIBE PAGE
-app.delete('/unsubscribe', (req, res) => {
+app.get('/unsubscribe', (req, res) => {
     res.render('unsubscribe.ejs')
+})
+
+//  DELETE PRICE ALERT
+app.post('/unsubscribe/:id', async (req, res) => {
+    // document Id for price alert
+    let priceAlertId = req.body.documentId;
+
+    try {
+        const priceAlert = await Product.findByIdAndDelete(priceAlertId);
+
+        if(!priceAlert){
+            res.status(404).send(`The price alert with the ID of ${priceAlertId} doesn't exist. Please try again.`)
+        }
+
+        res.status(200).send(`You have successfully unsubscribed from the price alert for: ${priceAlert.name}`);
+
+    } catch (error) {
+        res.status(500).send(`Sorry, an error occured: ${error}`);
+    }
+
 })
 
 // RESULTS PAGE (SUBMIT REQUEST)
@@ -68,27 +91,27 @@ app.post('/results-page', (req, res) => {
         await downloadImageProduct.data.pipe(fs.createWriteStream(path.join(__dirname, "./public/images", `${foundProduct.name}.jpeg`)));
 
         // updated product object with path name for image src tag
-        let priceALert = new Product({
+        let priceAlert = new Product({
             email: userEmail,
             ...foundProduct,
             ...{imageUrl: `/images/${foundProduct.name}.jpeg`},
         });
 
-        priceALert.save();
-        return {priceALert, userEmail};
+        priceAlert.save();
+        return {priceAlert, userEmail};
     }
 
    
     getProduct().then((product) => {
 
             // deconstruct function return value object promise
-            let { priceALert, userEmail } = product;
+            let { priceAlert, userEmail } = product;
 
-            //sendEmail('email-results.ejs', {priceALert, userEmail}).catch(console.error);
-            res.render('results-page.ejs', {priceALert, userEmail});
+            //sendEmail('email-results.ejs', {priceAlert, userEmail}).catch(console.error);
+            res.render('results-page.ejs', {priceAlert, userEmail});
     }).catch(error => console.error(error));
           
 });
 
 
-app.listen(PORT, () => console.log(`The server is running on PORT: ${PORT}. Open page at 'http://localhost:5000/home'`))
+app.listen(PORT, () => console.log(`The server is running on PORT: ${PORT}. Open page at 'http://localhost:5000'`))

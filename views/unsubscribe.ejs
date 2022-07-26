@@ -22,9 +22,10 @@
       background-position: center;
       background-repeat: no-repeat;
       background-size: cover;
+      height: 100vh;
     "
   >
-    <div class="container-fluid" style="backdrop-filter: blur(6px)">
+    <div class="container-fluid" style="backdrop-filter: blur(6px); height: 100%;">
       <header class="row mb-5 justify-content-center">
         <h1 class="col-12 p-3 text-center display-2">The Money Saver Helper</h1>
         <p class="col-6 mt-3 px-5 text-center">
@@ -32,7 +33,7 @@
           Saver Helper price alert app.
         </p>
       </header>
-      <main class="row justify-content-center" style="height: 100%">
+      <main class="row justify-content-center">
         <form
           class="col-8 d-flex flex-column gap-4"
           action="/unsubscribe/:id"
@@ -40,7 +41,7 @@
           id="search"
         >
           <label for="documentId" class="form-label fw-bold text-primary"
-            >To unsubscribe enter you price alert ID below:</label
+            >To Unsubscribe enter your Price Alert ID below:</label
           >
           <input
             type="text"
@@ -48,6 +49,8 @@
             name="documentId"
             id="documentId"
             placeholder="price alert ID number..."
+            minlength="24"
+            required
           />
           <button type="submit" class="btn btn-primary fw-bold">
             Unsubscribe
