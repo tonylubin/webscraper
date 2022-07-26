@@ -7,4 +7,4 @@ const task = cron.schedule(' 0 09-23/3 * * *', () => {
 
 task.start();
 
-module.exports = task;
+module.exports = { task };

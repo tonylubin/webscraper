@@ -9,6 +9,14 @@
       integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
       crossorigin="anonymous"
     />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+      crossorigin="anonymous"
+    >  
+    </script>
+   
+   
     <title>Money Saving App</title>
   </head>
   <body
@@ -33,7 +41,6 @@
           class="col-8 d-flex flex-column gap-4"
           action="/results-page"
           method="post"
-          id="search"
         >
           <label for="emailAddress" class="form-label fw-bold text-primary"
             >Email Address:</label
@@ -62,19 +69,5 @@
         </form>
       </main>
     </div>
-
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
-      crossorigin="anonymous"
-    >
-      const buttonDomElement = document.querySelector('.btn');
-      buttonDomElement.addEventListener('click', (e) => {
-        e.preventDefault();
-        console.log(buttonDomElement);
-        buttonDomElement.disabled = true;
-        buttonDomElement.innerText = 'Loading'
-      })
-    </script>
   </body>
 </html>

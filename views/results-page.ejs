@@ -21,12 +21,12 @@
       <header class="row mb-5 justify-content-center">
         <h1 class="col-12 p-3 text-center display-2">The Money Saver Helper</h1>
         <p class="col-6 mt-3 px-5 text-center text-secondary fs-5">
-          Congratulations, a price alert has been created and will be sent to <%= email %> 
+          Congratulations, a price alert has been created and will be sent to <%= userEmail %> 
         </p>
       </header>
       <main class="row justify-content-center" style="height: 100%">
         <h3 class="text-center text-primary">Here is your search result:</h3>
-        <img src="<%= fullProductObj.imageUrl %> " alt="image of <%= fullProductObj.name %> " style="height: 400px; width: 400px;"/>
+        <img src="<%= fullProductObj.imageUrl %>" alt="image of <%= fullProductObj.name %> " style="height: 400px; width: 400px;"/>
         <ul class="list-group align-items-center p-0">
             <li class="col list-group-item border-0 text-decoration-underline fs-5" style="font-weight: 600;"><%= fullProductObj.name %> </li>
             <li class="col list-group-item border-0 fw-bold text-primary fs-5">Current Price: <%= fullProductObj.currentPrice %> </li>
@@ -43,6 +43,14 @@
             <% } %>
         </ul>
       </main>
+      <div class="row justify-content-center">
+        <p class="mt-3 px-5 text-center fs-5 text-primary text-decoration-underline">Below is the ID Number for the price alert you created:</p>
+        <p class="text-center text-danger"><%= fullProductObj._id %> </p>
+        <p class="text-center text-secondary">(quote this number when you want to unsubscribe from this price alert)</p>
+        <a class="text-center link-dark mb-3" href="/unsubscribe">
+          http://localhost:5000/unsubscribe
+        </a>
+      </div>
     </div>
   </body>
 </html>

@@ -1,9 +1,9 @@
 const puppeteer = require("puppeteer");
 
-const productSearch = async (searchItem) => {
+const productSearched = async (searchItem) => {
 
   const url = "https://www.boots.com";
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({headless: false});
   const page = await browser.newPage();
   page.setDefaultTimeout(30000);
   page.setDefaultNavigationTimeout(30000);
@@ -43,6 +43,7 @@ const productSearch = async (searchItem) => {
       const partDomId = `${findItemDomElementId} > .product_info-container > .product_info`;
 
       // product details Object
+
       const product = {
         imageUrl: document
           .querySelector(
@@ -66,12 +67,12 @@ const productSearch = async (searchItem) => {
       };
       return product;
     },
-    domId,
-    searchItem
+    domId,        // arguments to parameters
+    searchItem   //  (id, searchTerm)
   );
 
   browser.close();
   return result;
 };
 
-module.exports = { productSearch };
+module.exports = productSearched;
