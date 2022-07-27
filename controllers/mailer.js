@@ -1,9 +1,10 @@
 require('dotenv').config();
 const nodemailer = require("nodemailer");
 const ejs = require('ejs');
+const path = require('path');
 
 const sendEmail = async (filename, details) => {
-  
+ 
   // deconstruct details object
   let { priceAlert, userEmail } = details;
   
@@ -17,7 +18,8 @@ const sendEmail = async (filename, details) => {
   });
 
   // location to HTML template
-  const data = await ejs.renderFile(__dirname + `/views/${filename}`, {priceAlert});
+  let pathName = path.resolve('views', filename);
+  let data = await ejs.renderFile(pathName, {priceAlert});
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
@@ -27,8 +29,9 @@ const sendEmail = async (filename, details) => {
     html: data
   });
 
-  console.log(`Message sent to: ${userEmail}`, info.accepted);
+  console.log(`Message sent to: ${info.accepted}`);
 }
+
 
 module.exports = sendEmail;
 
