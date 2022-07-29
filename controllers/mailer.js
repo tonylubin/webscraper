@@ -5,7 +5,7 @@ const path = require('path');
 
 const sendEmail = async (filename, details) => {
  
-  // deconstruct details object
+  // deconstruct details parameter object
   let { priceAlert, userEmail } = details;
   
   // create reusable transporter object using the default SMTP transport
@@ -19,7 +19,7 @@ const sendEmail = async (filename, details) => {
 
   // location to HTML template
   let pathName = path.resolve('views', filename);
-  let data = await ejs.renderFile(pathName, {priceAlert});
+  let data = await ejs.renderFile(pathName, {priceAlert, userEmail});
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
@@ -29,7 +29,7 @@ const sendEmail = async (filename, details) => {
     html: data
   });
 
-  console.log(`Message sent to: ${info.accepted}`);
+  console.log(`Email sent to: ${info.accepted}`);
 }
 
 
