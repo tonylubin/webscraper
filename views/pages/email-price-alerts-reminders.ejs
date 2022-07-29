@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Price Saver Alert</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      main {
+        width: 80vw;
+        margin: auto;
+      }
+
+      header {
+        margin-bottom: 3rem;
+      }
+
+      h1 {
+        padding: 0.2rem;
+        color: #212529;
+        text-align: center;
+        font-size: 4.5rem;
+        font-weight: 300;
+      }
+
+      h3 {
+        font-size: 1.75rem;
+        font-weight: 500;
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #0d6efd;
+      }
+
+      ul {
+        padding: 0;
+        margin-top: 3rem;
+        list-style: none;
+        text-align: center;
+      }
+
+      .list-name {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        padding: 0.2rem;
+        color: #212529;
+        text-decoration: underline;
+      }
+
+      .list-id {
+        color: #dc3545;
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        padding: 0.2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>The Money Saving Helper</h1>
+    </header>
+    <main>
+      <h3>
+        Here are the Price Alerts you have created that are associated to: <%=
+        userEmail %>
+      </h3>
+      <% priceAlert.forEach(alert => { %>
+      <ul>
+        <li class="list-name"><%= alert.name %></li>
+        <li class="list-id">Document ID: <%= alert._id %></li>
+      </ul>
+      <% }) %>
+    </main>
+  </body>
+</html>
