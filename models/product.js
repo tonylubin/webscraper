@@ -8,7 +8,7 @@ const ProductSchema = new mongoose.Schema({
     offer: {type: String},
     stockStatus: {type: String, required: true},
     email: {type: String, required: true}
-});
+}, {timestamps: true} );
 
 const Product = mongoose.model('Product', ProductSchema);
 

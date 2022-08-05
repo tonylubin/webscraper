@@ -19,6 +19,7 @@ const sendEmail = async (filename, details) => {
 
   // location to HTML template
   let pathName = path.resolve('views', filename);
+  
   let data = await ejs.renderFile(pathName, {priceAlert, userEmail});
 
   // send mail with defined transport object

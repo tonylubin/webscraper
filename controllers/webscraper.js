@@ -3,15 +3,15 @@ const puppeteer = require("puppeteer");
 const productSearched = async (searchItem) => {
 
   const url = "https://www.boots.com";
-  const browser = await puppeteer.launch({headless: false});
+  const browser = await puppeteer.launch();
   const page = await browser.newPage();
   page.setDefaultTimeout(30000);
   page.setDefaultNavigationTimeout(30000);
   await page.goto(url);
-
+ 
   await page.waitForSelector("#onetrust-accept-btn-handler");
   await page.click("#onetrust-accept-btn-handler");
-
+ 
   await page.waitForSelector("#AlgoliaSearchInput");
   await page.type("#AlgoliaSearchInput", searchItem);
   await Promise.all([page.waitForNavigation(), page.keyboard.press("Enter")]);
@@ -33,7 +33,7 @@ const productSearched = async (searchItem) => {
         );
       });
 
-      // get dom selector name/id for exact product 
+      // get dom selector name/id for exact product (if returns similar product search results)
       const findItemDomElementId =
         itemDomIdArr.length > 1
           ? `[data-productid="${itemDomElement.dataset.productid}"]`
@@ -43,7 +43,6 @@ const productSearched = async (searchItem) => {
       const partDomId = `${findItemDomElementId} > .product_info-container > .product_info`;
 
       // product details Object
-
       const product = {
         imageUrl: document
           .querySelector(
