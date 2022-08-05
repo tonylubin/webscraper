@@ -24,15 +24,6 @@
         margin: auto;
       }
 
-      main > p {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #198754;
-        margin-bottom: 3rem;
-        padding-top: 3rem;
-        text-align: center;
-      }
-
       header {
         margin-bottom: 3rem;
       }
@@ -95,6 +86,15 @@
         text-decoration: line-through;
       }
 
+      .savings {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #198754;
+        margin-bottom: 3rem;
+        padding-top: 3rem;
+        text-align: center;
+      }
+
       .offer {
         border: 0.1rem solid #dc3545;
         color: #dc3545;
@@ -142,7 +142,7 @@
     <main>
       <h3>Here is your search result:</h3>
       <% if (priceAlert.previousPrice.length) { %>
-      <p>
+      <p class="savings">
         Woo-hoo!!! This product is available to purchase at a lower price ££££
       </p>
       <% } %>
