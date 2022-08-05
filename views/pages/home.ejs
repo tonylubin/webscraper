@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("../partials/head.ejs");  %> 
+  </head>
+  <body
+    style="
+      background-image: url('images/person-with-clipboard-near-laptop-shopping-trolley-magnifier.jpg');
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    "
+  >
+    <div class="container-fluid" style="backdrop-filter: blur(6px); height: 100vh;">
+      <!-- NAVBAR -->
+      <%- include("../partials/navbar.ejs")  %>
+      <div class="row">
+        <div class="col-12">
+          <!-- HEADER -->
+          <%- include("../partials/header.ejs", { text: "homepage", textColor: "none" }); %>
+        </div>
+      </div>
+      <div class=" row justify-content-center">
+        <p class="col-8 px-0 py-5">
+          An app that allows you to create a price alert for any product from the retailer BOOTS. An email will be sent to you when the product becomes cheaper thereby helping you to save some money off your purchases....££££
+        </p>
+      </div>
+      <main class="row justify-content-center">
+        <form
+          class="col-8 d-flex flex-column gap-4"
+          action="/results-page"
+          method="post",
+        >
+          <label for="emailAddress" class="form-label fw-bold text-primary fs-5"
+            >Email Address:</label
+          >
+          <input
+            type="email"
+            class="form-control"
+            name="emailAddress"
+            id="emailAddress"
+            placeholder="name@example.com"
+            required
+          />
+          <label for="search" class="form-label fw-bold text-primary fs-5"
+            >Enter the item you want to set a price alert for below: <br>
+            <span class="text-muted fw-normal">(How to use: click on Menu)</span> 
+          </label
+          >
+          <textarea
+            name="search"
+            id="search"
+            placeholder="Enter product looking for..."
+            class="form-control"
+            style="height: 5rem"
+            required
+          ></textarea>
+          <button type="submit" class="btn btn-primary fw-bold" id="load-btn"> 
+            <span class="spinner-border spinner-border-sm invisible" role="status" aria-hidden="true"></span>
+            <span>Set Price Alert</span>
+          </button>
+        </form>
+      </main>
+    </div>    
+
+    <script>  
+
+      const btnSpanId = document.getElementById('load-btn');
+      btnSpanId.addEventListener('click', () => {
+        btnSpanId.childNodes[1].classList.replace('invisible','visible');
+        btnSpanId.childNodes[3].innerText = "Loading..."; 
+      }) 
+
+    </script>
+
+  </body>
+</html>

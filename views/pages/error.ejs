@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("../partials/head.ejs") %>
+  </head>
+  <body
+  style="
+  background-image: url('images/person-with-clipboard-near-laptop-shopping-trolley-magnifier.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+"
+  >
+    <div class="container-fluid" style="backdrop-filter: blur(6px); height: 100%;">
+      <!-- NAVBAR -->
+      <%- include("../partials/navbar.ejs")  %>
+      <div class="row">
+        <div class="col-12">
+          <!-- HEADER -->
+          <%- include("../partials/header.ejs") %>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <p class="col-8 px-0 py-5 text-center text-danger">
+          Opps...something has gone wrong!!!
+        </p>
+      </div>
+      <main class="row justify-content-center">
+        <!-- locals is the default name of object storing local variables in ejs -->
+        <% if (locals.priceReminderEmail) { %>
+         <p class="col-8 text-center">
+          Just to let you know that there are not any price alerts associated with the email address:   
+         </p>
+         <p class="col-8 text-center text-primary">
+          <%= priceReminderEmail %>
+         </p>
+        <% } %>
+        <% if (locals.priceAlertId) { %>
+          <p class="col-8 text-center">
+            The Price Alert with the ID: <span class="text-danger fw-bold"> <%= priceAlertId %> </span> dosen't exist.
+          </p>
+          <p class="col-8 text-center">
+            Verify you have entered the correct ID and please try again.
+          </p>         
+        <% } %>
+        <% if (locals.badRequest) { %>
+          <p class="col-8 text-center fs-5">
+            The app encountered a problem.
+            Verify you have entered the product name exactly as it is written on the website and try again.
+          </p>         
+        <% } %>
+      </main>
+    </div>
+  </body>
+</html>
