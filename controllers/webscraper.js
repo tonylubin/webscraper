@@ -5,8 +5,8 @@ const productSearched = async (searchItem) => {
   const url = "https://www.boots.com";
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  page.setDefaultTimeout(30000);
-  page.setDefaultNavigationTimeout(30000);
+  page.setDefaultTimeout(50000);
+  page.setDefaultNavigationTimeout(50000);
   await page.goto(url);
  
   await page.waitForSelector("#onetrust-accept-btn-handler");
@@ -14,10 +14,13 @@ const productSearched = async (searchItem) => {
  
   await page.waitForSelector("#AlgoliaSearchInput");
   await page.type("#AlgoliaSearchInput", searchItem);
-  await Promise.all([page.waitForNavigation(), page.keyboard.press("Enter")]);
+  await Promise.all([page.waitForNavigation({waitUntil: "load"}), page.keyboard.press("Enter")]);
 
   const domId = ".estore_product_container";
-  await page.waitForSelector(domId);
+  await page.waitForSelector(domId)
+    .catch((err) => {
+      console.error("An error occured waiting for the selector", err);
+    })
 
   let result = await page.evaluate(
     (id, searchTerm) => {
