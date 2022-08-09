@@ -12,6 +12,7 @@ const { ToadScheduler } = require('toad-scheduler');
 const { job, testJob } = require('./controllers/scheduler');
 
 
+
 // Initialise express app
 const app = express();
 
@@ -35,10 +36,11 @@ mongoose.connect(database,
 const db = mongoose.connection
 
 // connection error handling
-db.on('error', err => console.error('An error occurred in connection to' + err));
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.on('connected', () => {
     console.log(`Successfully connected via mongoose to the MongoDB database: ${db.name}`);
 });
+
 
 // STATIC FILES - shortened path link for ejs template files e.g: "images/facewash.jpeg"
 app.use(express.static(path.join(__dirname, 'public')));
@@ -68,91 +70,92 @@ app.get('/how-to-use', (req,res) => {
 })
 
 //  EMAIL PRICE ALERTS RETRIEVAL
-app.post('/price-alerts-reminder', async (req, res) => {
+app.post('/price-alerts-reminder', async (req, res, next) => {
         
     // email address
     let userEmail = req.body.price_alerts;
 
-    try {
-    // find documents(price alerts) associated with email address
-    const findAlerts = await Product.find({ email: userEmail });
-
-        if(!findAlerts.length) {
-            res.status(404).render('pages/error.ejs', {priceReminderEmail: userEmail});
-        }
-        else {
-            sendEmail('pages/email-price-alerts-reminders.ejs', { priceAlert: findAlerts, userEmail}).catch(err => console.error(err));
-            //  set time delay for response so that extra CSS can apply on client browser page 
-            setTimeout(() => res.redirect('/unsubscribe') , 5000);
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).render('pages/server-500.ejs');
-    }
     
+    // find documents(price alerts) associated with email address
+    await Product.find({ email: userEmail })
+        .then((findAlerts) => {            
+            if(!findAlerts.length) {
+                
+                // pass user email to local response object to use in error handling
+                res.locals.userEmail = userEmail;
+
+                // set custom error status (code & message)
+                const error = new Error(`No price alerts found associated with the email: ${userEmail}`);
+                error.status = 404;
+                next(error);
+            }
+            else {
+                sendEmail('pages/email-price-alerts-reminders.ejs', { priceAlert: findAlerts, userEmail})
+                    .then(() => {
+                        //  set time delay for response so that extra CSS can apply on client browser page 
+                        setTimeout(() => res.status(200).redirect('/unsubscribe') , 5000);
+                    })
+            }
+        })
+        .catch(error => next(error));        
 })
 
 //  DELETE PRICE ALERT - unsubscribe from
-app.post('/unsubscribe', async (req, res) => {
+app.post('/unsubscribe', async (req, res, next) => {
 
     // document Id for price alert
     let priceAlertId = req.body.documentId;
 
-    try {
-        const priceAlert = await Product.findByIdAndDelete(priceAlertId);
+    await Product.findByIdAndDelete(priceAlertId)
+        .then((priceAlert) => {
+            if(!priceAlert){
+                // pass price alert id to response object for error handling
+                res.locals.priceAlertId = priceAlertId;
 
-        if(!priceAlert){
-            res.status(404).render('pages/error.ejs', {priceAlertId: priceAlertId})
-        }
-
-        res.status(200).render('pages/success.ejs', {priceAlert});
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).render('pages/server-500.ejs');
-    }
+                // set custom error status (code & message)
+                const error = new Error(`No price alerts found associated with the ID: ${priceAlertId}`);
+                error.status = 404;
+                next(error);
+            } else {
+                res.status(200).render('pages/success.ejs', {priceAlert});
+            }    
+        })
+        .catch(error => next(error));
 
 })
 
 // RESULTS PAGE (SUBMIT REQUEST)
-app.post('/results-page', (req, res) => {
+app.post('/results-page', (req, res, next) => {
     
     // form details
     let productName = req.body.search.toLowerCase();
     let userEmail = req.body.emailAddress;
 
-    try {
-        const getProduct = async () => {
-    
-            let foundProduct = await productSearched(productName); 
-    
-            // updated product object with path name for image src tag
-            let priceAlert = new Product({
-                email: userEmail,
-                ...foundProduct
-            });
-    
-            priceAlert.save();
-            return { priceAlert, userEmail };
-        };
+    const getProduct = async () => {
 
-        getProduct().then((product) => {
-                
-                // deconstruct function return value object promise
-                let { priceAlert, userEmail } = product;
-    
-                sendEmail('pages/email-results.ejs', {priceAlert, userEmail}).catch(console.error);
-                res.render('pages/results-page.ejs', {priceAlert, userEmail});
+        let foundProduct = await productSearched(productName);
 
-        }).catch((error) => {
-            console.error(error);
-            res.status(400).render('pages/error.ejs', {badRequest: true});
+        // updated product object with user email address
+        let priceAlert = new Product({
+            email: userEmail,
+            ...foundProduct
         });
-        
-    } catch (error) {
-        res.status(500).render('pages/server-500.ejs');
-    }
-          
+
+        priceAlert.save();
+        return { priceAlert, userEmail };
+    };
+
+    getProduct()
+        .then((product) => {
+            
+            // deconstruct function return value object promise
+            let { priceAlert, userEmail } = product;
+            
+            sendEmail('pages/email-results.ejs', {priceAlert, userEmail});
+            res.status(200).render('pages/results-page.ejs', {priceAlert, userEmail});
+            
+        })
+        .catch(error => next(error));          
 });
 
 
@@ -160,9 +163,30 @@ app.post('/results-page', (req, res) => {
 const scheduler = new ToadScheduler();
 
 //  RUN SCHEDULED TASK OPERATION
-// scheduler.addSimpleIntervalJob(job);
-scheduler.addSimpleIntervalJob(testJob);
-console.log(`The cron job status is: ${scheduler.getById("test-job").getStatus()}`);
+// scheduler.addSimpleIntervalJob(testJob);
+scheduler.addSimpleIntervalJob(job);
+console.log(`The cron job status is: ${scheduler.getById("test-job").getStatus().toUpperCase()}`);
+
+
+//  ERROR HANDLING MIDDLEWARE
+app.use((error, req, res, next) => {
+    console.log(`Error Handling Middleware called on the Path: ${req.path}`);
+    console.log(`Error Status (${error.status}): ${error.message}.`);
+
+    if((error.message).includes("TypeError")) {
+        res.status(400).render('pages/error.ejs', {badRequest: true});
+    } else if(error.status === 404 && res.locals.userEmail) {
+        console.log(res.locals.userEmail)
+        res.status(404).render('pages/error.ejs', {priceReminderEmail: res.locals.userEmail});
+    } else if(error.status === 404 && res.locals.priceAlertId) {
+        res.status(404).render('pages/error.ejs', {priceAlertId: res.locals.priceAlertId});
+    }
+    else {
+        let code = res.status(error.status || 500);
+        res.status(code).render('pages/server-500.ejs');
+    }
+    
+});
 
 
 app.listen(PORT, () => console.log(`The server is running on PORT: ${PORT}. Open page at 'http://localhost:5000'`));
