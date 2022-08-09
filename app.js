@@ -165,7 +165,7 @@ const scheduler = new ToadScheduler();
 //  RUN SCHEDULED TASK OPERATION
 // scheduler.addSimpleIntervalJob(testJob);
 scheduler.addSimpleIntervalJob(job);
-console.log(`The cron job status is: ${scheduler.getById("test-job").getStatus().toUpperCase()}`);
+console.log(`The cron job status is: ${scheduler.getById("job").getStatus().toUpperCase()}`);
 
 
 //  ERROR HANDLING MIDDLEWARE
