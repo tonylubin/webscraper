@@ -41,7 +41,7 @@ db.on('connected', () => {
 });
 
 
-// STATIC FILES - shortened path link for ejs template files e.g: "images/facewash.jpeg"
+// STATIC FILES - shortened path link for ejs template files e.g: "images/boots-website.png"
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Using EJS for HTML - template default location(views folder)
