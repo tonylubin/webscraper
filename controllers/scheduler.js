@@ -24,7 +24,7 @@ const priceCheck = async (productName) => {
     return finalCheck;
 };
 
-// Schedule: every day at 09.00 & 20.00
+// Schedule: every day at 10.00 & 20.00
 const task = cron.schedule("0 10,20 * * *", async () => {
 
     //  database items check
