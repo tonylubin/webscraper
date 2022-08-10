@@ -48,7 +48,9 @@ const task = cron.schedule("0 10,20 * * *", async () => {
                     }
                 })
                 .catch((error) => {
-                    console.error(error);
+                    console.log("Something went wrong with trying to check if product was cheaper on website. ", error);
+                    // add item to end of array to try again
+                    itemsInDatabase.db.push(priceAlert);
                 })
             }
         })();
