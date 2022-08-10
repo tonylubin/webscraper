@@ -8,7 +8,7 @@ const productSearched = require('./controllers/webscraper');
 const sendEmail = require('./controllers/mailer');
 const mongoose = require('mongoose');
 const Product = require('./models/product');
-const { task } = require('./controllers/scheduler');
+const { task, testTask } = require('./controllers/scheduler');
 
 
 
@@ -160,6 +160,7 @@ app.post('/results-page', (req, res, next) => {
 
 //  Task Scheduler (cron job) starting
 task.start();
+// testTask.start();
 
 
 //  ERROR HANDLING MIDDLEWARE

@@ -60,7 +60,7 @@ const task = cron.schedule("0 10,20 * * *", async () => {
 
 
 //  Task for testing cron job
-const testTask = cron.schedule("*/2 * * * *", async () => {
+const testTask = cron.schedule("*/15 * * * *", async () => {
 
     console.log("Cron Job is running...");
     //  database items check
@@ -82,7 +82,12 @@ const testTask = cron.schedule("*/2 * * * *", async () => {
                     } else {
                         console.log("The price is the same - No savings to be made.");
                     }
-                });
+                })
+                .catch((error) => {
+                    console.log("Something went wrong with trying to check if product was cheaper on website. ", error);
+                    // add item to end of array to try again
+                    itemsInDatabase.db.push(priceAlert);
+                })
             }
         })();
     }
