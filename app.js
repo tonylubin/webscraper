@@ -8,8 +8,7 @@ const productSearched = require('./controllers/webscraper');
 const sendEmail = require('./controllers/mailer');
 const mongoose = require('mongoose');
 const Product = require('./models/product');
-const { ToadScheduler } = require('toad-scheduler');
-const { job, testJob } = require('./controllers/scheduler');
+const { task } = require('./controllers/scheduler');
 
 
 
@@ -159,13 +158,8 @@ app.post('/results-page', (req, res, next) => {
 });
 
 
-//  Initialise cron package helper
-const scheduler = new ToadScheduler();
-
-//  RUN SCHEDULED TASK OPERATION
-// scheduler.addSimpleIntervalJob(testJob);
-scheduler.addSimpleIntervalJob(job);
-console.log(`The cron job status is: ${scheduler.getById("job").getStatus().toUpperCase()}`);
+//  Task Scheduler (cron job) starting
+task.start();
 
 
 //  ERROR HANDLING MIDDLEWARE
@@ -184,8 +178,7 @@ app.use((error, req, res, next) => {
     else {
         let code = res.status(error.status || 500);
         res.status(code).render('pages/server-500.ejs');
-    }
-    
+    }    
 });
 
 
