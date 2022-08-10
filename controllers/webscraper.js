@@ -14,13 +14,23 @@ const productSearched = async (searchItem) => {
  
   await page.waitForSelector("#AlgoliaSearchInput");
   await page.type("#AlgoliaSearchInput", searchItem);
-  await Promise.all([page.waitForNavigation({waitUntil: "load"}), page.keyboard.press("Enter")]);
+  await Promise.all([page.waitForNavigation({waitUntil: "domcontentloaded"}), page.keyboard.press("Enter")]);
 
+  // A condition check - as sometimes page doesn't go to display search result page
+  let currentUrl = await page.url();
+  
+  // grab 1st word in searched for product e.g. ["clinique", "for", "men", "face", "wash", "200ml"]
+  let searchTermArr = searchItem.split(" "); 
+
+  // example results page URL: https://www.boots.com/sitesearch?searchTerm=clinique%20for%20men%20face%20wash%20200ml
+  // check condition includes string:  "searchTerm=[1st word in searchItem]"
+  if(!currentUrl.includes(`searchTerm=${searchTermArr[0]}`)) {
+    await page.type("#AlgoliaSearchInput", searchItem);
+    await Promise.all([page.waitForNavigation({waitUntil: "domcontentloaded"}), page.keyboard.press("Enter")]);
+  }
+  
   const domId = ".estore_product_container";
-  await page.waitForSelector(domId)
-    .catch((err) => {
-      console.error("An error occured waiting for the selector", err);
-    })
+  await page.waitForSelector(domId);
 
   let result = await page.evaluate(
     (id, searchTerm) => {
