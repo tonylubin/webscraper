@@ -1,4 +1,4 @@
-const { SimpleIntervalJob, AsyncTask } = require('toad-scheduler');
+const cron = require('node-cron');
 const productSearched = require('./webscraper');
 const sendEmail = require('./mailer');
 const Product = require("../models/product");
@@ -24,9 +24,8 @@ const priceCheck = async (productName) => {
     return finalCheck;
 };
 
-
-//  Define async task to perform in cron job
-const task = new AsyncTask("check database", async () => {
+// Schedule: every day at 09.00 & 20.00
+const task = cron.schedule("0 10,20 * * *", async () => {
 
     //  database items check
     let itemsInDatabase = await setTaskStatus();
@@ -51,13 +50,42 @@ const task = new AsyncTask("check database", async () => {
             }
         })();
     }
-}, (err) => console.error(err));
 
-//  Create scheduled cron job
-const job = new SimpleIntervalJob({ days: 1 }, task, "job");
-const testJob = new SimpleIntervalJob({ minutes: 1}, task, "test-job");
+}, { scheduled: false, timezone: "Europe/London" });
 
 
-module.exports =  { job, testJob };
+//  Task for testing cron job
+const testTask = cron.schedule("*/2 * * * *", async () => {
+
+    console.log("Cron Job is running...");
+    //  database items check
+    let itemsInDatabase = await setTaskStatus();
+
+    if(itemsInDatabase.check === "empty") {
+        console.log("No price alerts found in the database.");
+    }
+
+    if(itemsInDatabase.check === "filled") {
+        console.log("Price Alerts found.");
+        (async function() {
+            for(const priceAlert of itemsInDatabase.db) {
+                await priceCheck(priceAlert.name)
+                .then((checked) => {
+                    if(checked !== null) {
+                        sendEmail('pages/email-results.ejs', { priceAlert: checked, userEmail: priceAlert.email });
+                        console.log("The price changed - a saving is to be made!!!");
+                    } else {
+                        console.log("The price is the same - No savings to be made.");
+                    }
+                });
+            }
+        })();
+    }
+
+}, { scheduled: false, timezone: "Europe/London" });
+
+
+module.exports = { task, testTask };
+
 
 //  ***** for making cron expressions go to:  cronexpressiontogo.com *****
