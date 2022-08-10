@@ -46,7 +46,10 @@ const task = cron.schedule("0 10,20 * * *", async () => {
                     } else {
                         console.log("The price is the same - No savings to be made.");
                     }
-                });
+                })
+                .catch((error) => {
+                    console.error(error);
+                })
             }
         })();
     }
