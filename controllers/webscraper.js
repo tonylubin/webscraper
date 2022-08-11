@@ -17,14 +17,15 @@ const productSearched = async (searchItem) => {
   await Promise.all([page.waitForNavigation({waitUntil: "domcontentloaded"}), page.keyboard.press("Enter")]);
 
   // A condition check - as sometimes page doesn't go to display search result page
-  let currentUrl = await page.url();
+  let currentUrl = page.url().toLowerCase();
   
-  // grab 1st word in searched for product e.g. ["clinique", "for", "men", "face", "wash", "200ml"]
+  // grab 1st word in searched for product e.g. ["Kiehl's", "Facial", "Fuel", "Energizing" "Face", "Wash", "250ml"]
   let searchTermArr = searchItem.split(" "); 
-
-  // example results page URL: https://www.boots.com/sitesearch?searchTerm=clinique%20for%20men%20face%20wash%20200ml
-  // check condition includes string:  "searchTerm=[1st word in searchItem]"
-  if(!currentUrl.includes(`searchTerm=${searchTermArr[0]}`)) {
+  let textCondition = searchTermArr[0].toLowerCase().replace(/\W/g, "");
+  // example results page URL: "https://www.boots.com/sitesearch?searchTerm=Kiehls%20Facial%20Fuel%20Energizing%20Face%20Wash%20250ml"
+  // check condition includes string:  e.g. "searchterm=kiehls" 
+  // (N.B: in lowercase due to website using either upper/lower & removing punctuation)
+  if(!currentUrl.includes(`searchterm=${textCondition}`)) {
     await page.type("#AlgoliaSearchInput", searchItem);
     await Promise.all([page.waitForNavigation({waitUntil: "domcontentloaded"}), page.keyboard.press("Enter")]);
   }
