@@ -150,6 +150,7 @@ app.post('/results-page', (req, res, next) => {
             // deconstruct function return value object promise
             let { priceAlert, userEmail } = product;
             
+            console.log("Well done! A price alert has been created.")
             sendEmail('pages/email-results.ejs', {priceAlert, userEmail});
             res.status(200).render('pages/results-page.ejs', {priceAlert, userEmail});
             
@@ -166,7 +167,7 @@ task.start();
 //  ERROR HANDLING MIDDLEWARE
 app.use((error, req, res, next) => {
     console.log(`Error Handling Middleware called on the Path: ${req.path}`);
-    console.log(`Error Status (${error.status}): ${error.message}.`);
+    console.log(`Error Status (${error.status}): ${error.message}.`, error);
 
     if((error.message).includes("TypeError")) {
         res.status(400).render('pages/error.ejs', {badRequest: true});
