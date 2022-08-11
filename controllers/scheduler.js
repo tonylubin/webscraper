@@ -24,8 +24,8 @@ const priceCheck = async (productName) => {
     return finalCheck;
 };
 
-// Schedule: every day at 10.00 & 20.00
-const task = cron.schedule("0 10,20 * * *", async () => {
+// Schedule: every day at 08.00 & 20.00
+const task = cron.schedule("0 08,20 * * *", async () => {
 
     //  database items check
     let itemsInDatabase = await setTaskStatus();
@@ -59,8 +59,8 @@ const task = cron.schedule("0 10,20 * * *", async () => {
 }, { scheduled: false, timezone: "Europe/London" });
 
 
-//  Task for testing cron job
-const testTask = cron.schedule("*/15 * * * *", async () => {
+//  Task for testing cron job (every 30mins)
+const testTask = cron.schedule("*/30 * * * *", async () => {
 
     console.log("Cron Job is running...");
     //  database items check
