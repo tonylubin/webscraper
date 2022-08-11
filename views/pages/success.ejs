@@ -3,15 +3,7 @@
 <head>
     <%- include("../partials/head.ejs") %>
 </head>
-<body
-style="
-background-image: url('images/person-with-clipboard-near-laptop-shopping-trolley-magnifier.jpg');
-background-position: center;
-background-repeat: no-repeat;
-background-size: cover;
-height: 100vh;
-"
->
+<body>
     <div class="container-fluid" style="backdrop-filter: blur(6px); height: 100%;">
         <!-- NAVBAR -->
         <%- include("../partials/navbar.ejs")  %>
@@ -22,12 +14,13 @@ height: 100vh;
             </div>
         </div>
         <main class="row justify-content-center pt-5 gap-4">
-           <p class="col-8 text-center text-success fw-bold fs-5">
+            <p class="col-12 text-center text-success fw-bold fs-5">
             All done...you have successfully unsubscribed from the Price Alert that you set for: 
-           </p>  
-           <p class="col-8 text-center fs-5">
+            </p>  
+            <p class="col-12 text-center fs-5">
             <%= priceAlert.name.toUpperCase() %> 
-           </p>
+            </p>
+            <img src="<%= priceAlert.imageUrl %>" alt="image of <%= priceAlert.name %> " style="height: 400px; width: 400px;"/>
         </main>
       </div>
 </body>
