@@ -136,10 +136,10 @@ app.post('/results-page', (req, res, next) => {
 
         // updated product object with user email address
         let priceAlert = new Product({
-            email: userEmail,
-            ...foundProduct
+            ...foundProduct,
+            email: userEmail
         });
-
+        
         priceAlert.save();
         return { priceAlert, userEmail };
     };

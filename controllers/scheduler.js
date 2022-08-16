@@ -60,7 +60,7 @@ const task = cron.schedule("0 08,20 * * *", async () => {
 
 
 //  Task for testing cron job (every 30mins)
-const testTask = cron.schedule("*/30 * * * *", async () => {
+const testTask = cron.schedule("*/2 * * * *", async () => {
 
     console.log("Cron Job is running...");
     //  database items check
