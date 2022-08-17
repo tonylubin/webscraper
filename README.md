@@ -19,6 +19,12 @@ I also have the possibility to get a reminder of the price alert(s) I have set-u
 
 <br>
 
+<div align="center">
+  <img src="public/images/price-alert-app.gif" alt="money saver app">
+</div>
+
+<br>
+
 ---
 
 ## APPROACH & OBJECTIVES
@@ -38,6 +44,12 @@ The app was designed entirely on the back-end using **Node Js** and with a serve
 * EJS - setting for the html template engine for server-side rendering with views (webpages) and partials (reusable code for pages).
 
 * Inline-style CSS for email (best approach due to limitations of email css support)
+
+<br>
+
+<div align="center">
+  <img src="public/images/price-alert-email.gif" alt="money saver app">
+</div>
 
 <br>
 
@@ -188,10 +200,12 @@ As the app stores the price alerts in a database, you will need a *MongoDb* acco
 
 ## FURTHER INFO
 
-* To set your own schedule(time) to run the price comparison got to `controllers/scheduler.js` file and alter the cron expression that looks like ( * * * * * ) - https://cronexpressiontogo.com for info.
+* To set your own schedule(time) to run the price comparison got to `controllers/scheduler.js` file and alter the cron expression that looks like ( * * * * * ) - <https://cronexpressiontogo.com> for info.
 
 * utilised PM2 module for process managing (keeping server alive) and restarting automatically<br>
 e.g. in terminal run `pm2 start app.js` then `pm2 save`
 
 * after boot-up in terminal run `pm2 resurrect` for saved processess to resume
 This is needed because app is built on linux (using wsl2) and start-up script won't work across the different operating systems.
+
+* **EXTRA FUTURE WORK :** Can be hosted/deployed to a cloud hosting website service such as Heroku and run app at scheduled times through heroku scheduler. Requires modifying `scheduler.js file` to remove cron job from `task()` function and then calling it at the required times.
