@@ -153,7 +153,9 @@ Clone down repo. You will need `npm` and `node` installed globally.<br>
 
 ### To Start Server
 
-`npm start`
+Linux: &nbsp; `npm run start`
+
+windows: &nbsp; `npm run windows`
 
 ### View Locally
 
