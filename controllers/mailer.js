@@ -30,7 +30,7 @@ const sendEmail = async (filename, details) => {
     html: data
   });
 
-  console.log(`Email sent to: ${info.accepted}`);
+  console.log("\x1b[33m%s\x1b[0m", `Email sent to: ${info.accepted}`);
 }
 
 
