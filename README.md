@@ -178,6 +178,8 @@ As the app stores the price alerts in a database, you will need a *MongoDb* acco
 
 > `EMAIL_PASSWORD = <your_email_password>`
 
+> `EMAIL_SERVICE = <your_email_provider>` e.g. hotmail
+
 <br>
 
 ---
