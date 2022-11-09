@@ -151,6 +151,8 @@ Clone down repo. You will need `npm` and `node` installed globally.<br>
 
 `npm install`
 
+FOR WINDOWS USE: windows branch: &nbsp; `git checkout windows`
+
 ### To Start Server
 
 Linux: &nbsp; `npm run start`
@@ -172,9 +174,11 @@ As the app stores the price alerts in a database, you will need a *MongoDb* acco
 
 3. Add your email details (account to send emails from) as follows (for further info visit nodemailer) :
 
-> `EMAIL_USERNAME = <your_email_address>`
+> `EMAIL_USERNAME = <your_email_address>` &nbsp; e.g. bobsmith@hotmail.com
 
-> `EMAIL_PASSWORD = <your_email_password>`
+> `EMAIL_PASSWORD = <your_email_password>` &nbsp; e.g. password1234
+
+> `EMAIL_SERVICE = <your_email_provider>` &nbsp; e.g. hotmail
 
 <br>
 
@@ -210,4 +214,7 @@ e.g. in terminal run `pm2 start app.js` then `pm2 save`
 * after boot-up in terminal run `pm2 resurrect` for saved processess to resume
 This is needed because app is built on linux (using wsl2) and start-up script won't work across the different operating systems.
 
-* **EXTRA FUTURE WORK :** Can be hosted/deployed to a cloud hosting website service such as Heroku and run app at scheduled times through heroku scheduler. Requires modifying `scheduler.js file` to remove cron job from `task()` function and then calling it at the required times.
+**EXTRA FUTURE WORK :**
+
+* Look into hosting/deployment to a cloud hosting website service. Requires modifying `scheduler.js file` to remove cron job from `task()` function and then calling it at the required times.
+* Further info into running automated scripts for running program at user log in.
