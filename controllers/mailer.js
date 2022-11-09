@@ -10,7 +10,7 @@ const sendEmail = async (filename, details) => {
   
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
-   service: "gmail",
+   service: process.env.EMAIL_SERVICE,
     auth: {
       user: process.env.EMAIL_USERNAME, 
       pass: process.env.EMAIL_PWD, 
@@ -30,7 +30,7 @@ const sendEmail = async (filename, details) => {
     html: data
   });
 
-  console.log(`Email sent to: ${info.accepted}`);
+  console.log('\x1b[33m%s\x1b[0m', `Email sent to: ${info.accepted}`);
 }
 
 
