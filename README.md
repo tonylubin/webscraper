@@ -151,6 +151,8 @@ Clone down repo. You will need `npm` and `node` installed globally.<br>
 
 `npm install`
 
+FOR WINDOWS USE: windows branch: &nbsp; `git checkout windows`
+
 ### To Start Server
 
 Linux: &nbsp; `npm run start`
@@ -202,6 +204,12 @@ As the app stores the price alerts in a database, you will need a *MongoDb* acco
 
 ## FURTHER INFO
 
+#### Windows
+
+* To set up a 'cron job' would have to use Task Scheduler to run the program at user desired scheduled times
+
+#### Linux
+
 * To set your own schedule(time) to run the price comparison got to `controllers/scheduler.js` file and alter the cron expression that looks like ( * * * * * ) - <https://cronexpressiontogo.com> for info.
 
 * utilised PM2 module for process managing (keeping server alive) and restarting automatically<br>
@@ -210,4 +218,8 @@ e.g. in terminal run `pm2 start app.js` then `pm2 save`
 * after boot-up in terminal run `pm2 resurrect` for saved processess to resume
 This is needed because app is built on linux (using wsl2) and start-up script won't work across the different operating systems.
 
-* **EXTRA FUTURE WORK :** Can be hosted/deployed to a cloud hosting website service such as Heroku and run app at scheduled times through heroku scheduler. Requires modifying `scheduler.js file` to remove cron job from `task()` function and then calling it at the required times.
+**EXTRA FUTURE WORK :** 
+
+Look to app being hosted/deployed to a cloud hosting website. Requires modifying `scheduler.js file` to remove cron job from `task()` function and then calling it at the required times.
+
+Look into more info about running automated scripts to run program at log in
