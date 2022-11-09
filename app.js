@@ -29,7 +29,7 @@ const database = process.env.MONGODB_URI;
     
 mongoose.connect(database,
     { useNewUrlParser: true,
-    useUnifiedTopology: true}).catch(err => console.error('An error occurred in connection to' + err));
+    useUnifiedTopology: true}).catch(err => console.error('\x1b[31m%s\x1b[0m', 'An error occurred in connection to' + err));
 
 // DEFAULT DATABASE CONNECTION
 const db = mongoose.connection
@@ -37,7 +37,7 @@ const db = mongoose.connection
 // connection error handling
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.on('connected', () => {
-    console.log(`Successfully connected via mongoose to the MongoDB database: ${db.name}`);
+    console.log("\x1b[32m%s\x1b[0m", `Successfully connected via mongoose to the MongoDB database: ${db.name}`);
 });
 
 
@@ -150,7 +150,7 @@ app.post('/results-page', (req, res, next) => {
             // deconstruct function return value object promise
             let { priceAlert, userEmail } = product;
             
-            console.log("Well done! A price alert has been created.")
+            console.log("\x1b[32m%s\x1b[0m", "Well done! A price alert has been created.")
             sendEmail('pages/email-results.ejs', {priceAlert, userEmail});
             res.status(200).render('pages/results-page.ejs', {priceAlert, userEmail});
             
@@ -164,8 +164,8 @@ windowsTask();
 
 //  ERROR HANDLING MIDDLEWARE
 app.use((error, req, res, next) => {
-    console.log(`Error Handling Middleware called on the Path: ${req.path}`);
-    console.log(`Error Status (${error.status}): ${error.message}.`, error);
+    console.log('\x1b[31m%s\x1b[0m', `Error Handling Middleware called on the Path: ${req.path}`);
+    console.log('\x1b[31m%s\x1b[0m', `Error Status (${error.status}): ${error.message}.`, error);
 
     if((error.message).includes("TypeError")) {
         res.status(400).render('pages/error.ejs', {badRequest: true});
@@ -182,4 +182,4 @@ app.use((error, req, res, next) => {
 });
 
 
-app.listen(PORT, () => console.log(`The server is running on PORT: ${PORT}. Open page at 'http://localhost:5000'`));
+app.listen(PORT, () => console.log("\x1b[32m%s\x1b[0m", `The server is running on PORT: ${PORT}. Open page at 'http://localhost:5000'`));

@@ -32,24 +32,24 @@ const windowsTask = async () => {
     let itemsInDatabase = await setTaskStatus();
 
     if(itemsInDatabase.check === "empty") {
-        console.log("No price alerts found in the database.");
+        console.log("\x1b[34m%s\x1b[0m", "No price alerts found in the database.");
     }
 
     if(itemsInDatabase.check === "filled") {
-        console.log("Price Alerts found.");
+        console.log("\x1b[32m%s\x1b[0m", "Price Alerts found.");
         (async function() {
             for(const priceAlert of itemsInDatabase.db) {
                 await priceCheck(priceAlert.name)
                 .then((checked) => {
                     if(checked !== null) {
                         sendEmail('pages/email-results.ejs', { priceAlert: checked, userEmail: priceAlert.email });
-                        console.log("The price changed - a saving is to be made!!!");
+                        console.log("\x1b[33m%s\x1b[0m", "The price changed - a saving is to be made!!!");
                     } else {
-                        console.log("The price is the same - No savings to be made.");
+                        console.log("\x1b[33m%s\x1b[0m", "The price is the same - No savings to be made.");
                     }
                 })
                 .catch((error) => {
-                    console.log("Something went wrong with trying to check if product was cheaper on website. ", error);
+                    console.log("\x1b[31m%s\x1b[0m", "Something went wrong with trying to check if product was cheaper on website. ", error);
                     // add item to end of array to try again
                     itemsInDatabase.db.push(priceAlert);
                 })
