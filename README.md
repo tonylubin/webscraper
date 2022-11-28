@@ -209,7 +209,8 @@ As the app stores the price alerts in a database, you will need a *MongoDb* acco
 * To set your own schedule(time) to run the price comparison got to `controllers/scheduler.js` file and alter the cron expression that looks like ( * * * * * ) - <https://cronexpressiontogo.com> for info.
 
 * utilised PM2 module for process managing (keeping server alive) and restarting automatically<br>
-e.g. in terminal run `pm2 start app.js` then `pm2 save`
+install pm2 : `npm install pm2 -g`
+start: `pm2 start app.js` then `pm2 save`
 
 * after boot-up in terminal run `pm2 resurrect` for saved processess to resume
 This is needed because app is built on linux (using wsl2) and start-up script won't work across the different operating systems.
