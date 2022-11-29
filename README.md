@@ -208,11 +208,12 @@ As the app stores the price alerts in a database, you will need a *MongoDb* acco
 
 * To set your own schedule(time) to run the price comparison got to `controllers/scheduler.js` file and alter the cron expression that looks like ( * * * * * ) - <https://cronexpressiontogo.com> for info.
 
-* utilised PM2 module for process managing (keeping server alive) and restarting automatically<br>
-install pm2 : `npm install pm2 -g`
-start: `pm2 start app.js` then `pm2 save`
-
-* after boot-up in terminal run `pm2 resurrect` for saved processess to resume
+* utilised PM2 module for process managing (keeping server alive) and restarting automatically.<br> Install: `npm install pm2@latest -g`<br>
+WSL2 now uses *systemd* thus can now handle reboots without manual input each time user starts up WSL2 instance
+  * for *systemd* to work need to change wsl.conf file (see https://devblogs.microsoft.com/commandline/systemd-support-is-now-available-in-wsl/)  
+  * for startup script: in terminal of app folder run `pm2 startup` follow instructions but add parenthesis around `$PATH` for correct path e.g. `sudo su -c "env PATH="$PATH":/home...."` then `pm2 save`.
+  
+* Manual process: `pm2 start app.js` then `pm2 save`. After boot-up in terminal run `pm2 resurrect` for saved processess to resume
 This is needed because app is built on linux (using wsl2) and start-up script won't work across the different operating systems.
 
 **EXTRA FUTURE WORK :**
