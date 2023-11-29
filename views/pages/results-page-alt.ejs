@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- HEAD -->
+    <%- include("../partials/head.ejs"); %> 
+  <body>
+    <!-- HEADER -->
+    <%- include("../partials/header.ejs"); %>
+  </div>
+    <div class="container-fluid d-flex flex-column justify-content-center pt-5 h-100">
+      <!-- TITLE -->
+      <%- include("../partials/title.ejs") %>
+      <p class="row justify-content-center m-5 px-5 text-success gap-3 fw-bold fs-5">
+        Congratulations, a price alert has been created and will be sent to: <span class="text-dark text-center fw-bold fs-5">&#x2709; <%= Product.email %> </span> 
+      </p>
+      <main class="row justify-content-center h-100%">
+        <p class="col-12 text-center orangeUnderline fs-4 fw-bold redText text-capitalize py-4"> <%= Product.title %> </p>
+        <img src="<%= Product.imageUrl %>" alt="<%= Product.title %>" style="height: 400px; width: 400px;" class="product_showcase p-5 border border-dark border-2"/>
+        <ul class="list-group align-items-center p-0 pt-5 gap-4">
+            <li class="col list-group-item rounded-pill fw-bold text-white bg-info fs-5">Current Price: <%- Product.offer ? Product.retailPrice : Product.nectarOffer ? Product.offerPrice : Product.retailPrice %> </li>
+            <% if (Product.retailPrice && Product.offerPrice) { %>
+                <li class="col list-group-item border-0 text-danger fs-5 bg-transparent text-decoration-line-through">Normal Price: <%- Product.offer ? Product.offerPrice : Product.retailPrice %></li> 
+            <% } %>
+            <% if (Product.promotionMsg) { %>
+                <li class="col list-group-item redText promoBox bg-transparent fw-bold">PROMOTION: <%= Product.promotionMsg %> </li>
+            <% } %>
+            <% if (Product.nectarOffer) { %>
+                <li class="col list-group-item border-0 text-white fs-5 fw-bold nectar"><%= Product.nectarOffer %></li>
+            <% } %>
+            <% if (Product.offer) { %>
+                <li class="col list-group-item rounded-0 text-white fs-5 fw-bold nectar">Reduced <%= Product.offer %></li>
+            <% } %>
+        </ul>
+      </main>
+      <div class="row justify-content-center pt-5">
+        <p class="mt-3 px-5 text-center fs-5 text-decoration-underline">Below is the ID Number for the price alert you created:</p>
+        <p class="text-center text-warning fw-bold"><%= Product._id %> </p>
+        <p class="text-center text-black-50">(quote this number when you want to unsubscribe from this price alert)</p>
+        <a class="text-center link-primary mb-3" href="/unsubscribe">
+          http://localhost:5000/unsubscribe
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

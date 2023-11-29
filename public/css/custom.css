@@ -1,0 +1,70 @@
+/* color variables */
+:root {
+  --headingColor: #264143;
+  --btnBg: #DE5499;
+  --btnHover: #d8006c;
+  --secondaryBg: #EDDCD9;
+  --orangeShadow: #E99F4C;
+  --mainBg: rgba(240 246 238 / 0.674);
+  --purpleBG: #8223fa;
+}
+
+body {
+  background-color: var(--mainBg);
+}
+
+.orangeUnderline {
+  text-decoration: 4px underline var(--orangeShadow);
+  text-underline-offset: 2px;
+}
+
+.home_page, .product_showcase {
+  background-color: var(--secondaryBg);
+  box-shadow: 3px 4px 0px 1px var(--orangeShadow);
+}
+
+.altBgColor {
+  background-color: var(--secondaryBg);
+}
+
+.redText {
+  color: var(--btnBg);
+}
+
+.blurBg {
+  backdrop-filter: blur(2px);
+}
+
+.btn {
+  background-color: var(--btnBg);
+  box-shadow: 3px 3px 0px 0px var(--orangeShadow)
+}
+
+.btn:hover, .btn:active, .btn:focus {
+  background-color: var(--btnHover);
+  box-shadow:  0 0 0.25rem var(--btnBg);
+}
+
+label {
+  color: var(--headingColor);
+}
+
+input, textarea {
+  box-shadow: 3px 4px 0px 1px var(--orangeShadow)
+}
+
+.form-control:focus {
+  box-shadow:  0 0 0.25rem var(--btnBg)
+}
+
+.navbar {
+  background-color: var(--orangeShadow);
+}
+
+.nectar {
+  background-color: var(--purpleBG);
+}
+
+.promoBox {
+  border: 2px solid var(--btnBg) !important;
+}
