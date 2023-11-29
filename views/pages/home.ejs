@@ -1,77 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <%- include("../partials/head.ejs");  %> 
-  </head>
-  <body
-    style="
-      background-image: url('images/person-with-clipboard-near-laptop-shopping-trolley-magnifier.jpg');
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-    "
-  >
-    <div class="container-fluid" style="backdrop-filter: blur(6px); height: 100vh;">
-      <!-- NAVBAR -->
-      <%- include("../partials/navbar.ejs")  %>
-      <div class="row">
-        <div class="col-12">
-          <!-- HEADER -->
-          <%- include("../partials/header.ejs", { text: "homepage", textColor: "none" }); %>
+  <!-- HEAD -->
+  <%- include("../partials/head.ejs"); %>
+  <body>
+    <!-- HEADER -->
+    <%- include("../partials/header.ejs", { text: "homepage", textColor: "none"
+    }); %>
+    <div
+      class="container-fluid px-0 d-flex align-items-center"
+      style="height: 100vh"
+    >
+      <div class="row pt-5 h-auto">
+        <div
+          class="col-4 d-flex flex-column align-items-center justify-content-center gap-5"
+          style="
+            background-image: url('/images/moneysaver-backgroundAlt.png');
+            background-position: center bottom;
+            background-repeat: no-repeat;
+            background-size: contain;
+          "
+        >
+          <!-- TITLE -->
+          <%- include("../partials/title.ejs"); %>
+          <div class="row justify-content-center">
+            <p class="col-8 px-0 py-5 fw-bold blurBg">
+              An app that allows you to create a price alert for any product
+              from the retailer BOOTS. An email will be sent to you when the
+              product becomes cheaper thereby helping you to save some money off
+              your purchases....££££
+            </p>
+          </div>
+        </div>
+        <div class="col-8 d-flex align-items-center justify-content-center">
+          <main
+            class="row justify-content-center p-5 border border-2 border-dark rounded home_page"
+          >
+            <form
+              id="form"
+              class="col-12 d-flex flex-column gap-4 needs-validation"
+              action="/results-page-alt"
+              method="post"
+              novalidate
+            >
+              <label for="emailAddress" class="form-label fw-bold fs-5"
+                >Email Address:</label
+              >
+              <input
+                type="email"
+                class="form-control border border-dark form_inputs"
+                name="emailAddress"
+                id="emailAddress"
+                placeholder="name@example.com"
+                required
+              />
+              <label for="search" class="form-label fw-bold fs-5"
+                >Enter the item you want to set a price alert for below: <br />
+                <span class="text-muted fw-normal"
+                  >(How to use: click on Menu)</span
+                >
+              </label>
+              <textarea
+                name="search"
+                id="search"
+                placeholder="Enter product looking for..."
+                class="form-control border border-dark form_inputs"
+                style="height: 5rem"
+                minlength="5"
+                required
+              ></textarea>
+              <button
+                type="submit"
+                class="btn fw-bold border border-dark"
+                id="load-btn"
+              >
+                <span
+                  class="spinner-border spinner-border-sm invisible"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span>Set Price Alert</span>
+              </button>
+            </form>
+          </main>
         </div>
       </div>
-      <div class=" row justify-content-center">
-        <p class="col-8 px-0 py-5">
-          An app that allows you to create a price alert for any product from the retailer BOOTS. An email will be sent to you when the product becomes cheaper thereby helping you to save some money off your purchases....££££
-        </p>
-      </div>
-      <main class="row justify-content-center">
-        <form
-          class="col-8 d-flex flex-column gap-4"
-          action="/results-page"
-          method="post",
-        >
-          <label for="emailAddress" class="form-label fw-bold text-primary fs-5"
-            >Email Address:</label
-          >
-          <input
-            type="email"
-            class="form-control"
-            name="emailAddress"
-            id="emailAddress"
-            placeholder="name@example.com"
-            required
-          />
-          <label for="search" class="form-label fw-bold text-primary fs-5"
-            >Enter the item you want to set a price alert for below: <br>
-            <span class="text-muted fw-normal">(How to use: click on Menu)</span> 
-          </label
-          >
-          <textarea
-            name="search"
-            id="search"
-            placeholder="Enter product looking for..."
-            class="form-control"
-            style="height: 5rem"
-            required
-          ></textarea>
-          <button type="submit" class="btn btn-primary fw-bold" id="load-btn"> 
-            <span class="spinner-border spinner-border-sm invisible" role="status" aria-hidden="true"></span>
-            <span>Set Price Alert</span>
-          </button>
-        </form>
-      </main>
-    </div>    
+    </div>
 
-    <script>  
+    <script>
+      (() => {
+        "use strict";
 
-      const btnSpanId = document.getElementById('load-btn');
-      btnSpanId.addEventListener('click', () => {
-        btnSpanId.childNodes[1].classList.replace('invisible','visible');
-        btnSpanId.childNodes[3].innerText = "Loading..."; 
-      }) 
+        const btnRef = document.getElementById("load-btn");
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll(".needs-validation");
 
+        // Loop over them and prevent submission
+        Array.from(forms).forEach((form) => {
+          form.addEventListener(
+            "submit",
+            (event) => {
+              if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+
+              form.classList.add("was-validated");
+              if (form.checkValidity()) {
+                btnRef.childNodes[3].innerText = "Submitting...";
+                btnRef.childNodes[1].classList.replace("invisible", "visible");
+              }
+            },
+            false
+          );
+        });
+      })();
     </script>
-
   </body>
 </html>

@@ -1,38 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <%- include("../partials/head.ejs");  %> 
-  </head>
-  <body
-    style="
-      background-image: url('images/person-with-clipboard-near-laptop-shopping-trolley-magnifier.jpg');
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-      height: 100vh;
-    "
-  >
-    <div class="container-fluid" style="backdrop-filter: blur(6px); height: 100%;">
-      <!-- NAVBAR -->
-      <%- include("../partials/navbar.ejs")  %>
-      <div class="row">
-        <div class="col-12">
-          <!-- HEADER -->
-          <%- include("../partials/header.ejs");  %> 
-        </div>
-      </div>
+    <!-- HEAD -->
+    <%- include("../partials/head.ejs"); %>
+  <body>
+    <!-- HEADER -->
+    <%- include("../partials/header.ejs"); %>
+    <div
+      class="container-fluid pt-5 d-flex flex-column justify-content-center"
+      style="
+        height: 100vh;
+        background-image: url('/images/moneysaver-backgroundAlt.png');
+        background-position: center bottom;
+        background-repeat: no-repeat;
+        background-size: contain;
+      "
+    >
+      <!-- TITLE -->
+      <%- include("../partials/title.ejs"); %>
       <div class="row justify-content-center">
-        <p class="col-8 px-0 py-5 text-center text-dark">
-          We're glad that you have saved some money with the use of The Money Saver Helper price alert app.
+        <p class="col-8 px-0 py-5 text-center text-success fw-bold blurBg">
+          We're glad that you have saved some money with the use of The Money
+          Saver Helper price alert app.
         </p>
-      </div> 
+      </div>
       <main class="row justify-content-center">
         <form
-          class="col-8 d-flex flex-column gap-4"
+          id="form"
+          class="col-8 d-flex flex-column gap-4 needs-validation"
           action="/unsubscribe"
           method="post"
+          novalidate
         >
-          <label for="documentId" class="form-label fw-bold text-primary fs-5"
+          <label for="documentId" class="form-label fw-bold fs-5"
             >To Unsubscribe enter your Price Alert ID below:</label
           >
           <input
@@ -44,11 +43,50 @@
             minlength="24"
             required
           />
-          <button type="submit" class="btn btn-primary fw-bold">
-            Unsubscribe
+          <button
+            type="submit"
+            class="btn fw-bold border border-dark"
+            id="load-btn"
+          >
+            <span
+              class="spinner-border spinner-border-sm invisible"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span>Unsubscribe</span>
           </button>
         </form>
       </main>
     </div>
   </body>
 </html>
+
+<script>
+  (() => {
+    "use strict";
+
+    const btnRef = document.getElementById("load-btn");
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll(".needs-validation");
+
+    // Loop over them and prevent submission
+    Array.from(forms).forEach((form) => {
+      form.addEventListener(
+        "submit",
+        (event) => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+
+          form.classList.add("was-validated");
+          if(form.checkValidity()) {
+            btnRef.childNodes[1].classList.replace("invisible", "visible");
+            btnRef.childNodes[3].innerText = "Unsubscribing...";
+          }
+        },
+        false
+      );
+    });
+  })();
+</script>

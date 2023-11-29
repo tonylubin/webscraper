@@ -6,7 +6,7 @@ const path = require('path');
 const sendEmail = async (filename, details) => {
  
   // deconstruct details parameter object
-  let { priceAlert, userEmail } = details;
+  let { Product, userEmail } = details;
   
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
@@ -20,7 +20,7 @@ const sendEmail = async (filename, details) => {
   // location to HTML template
   let pathName = path.resolve('views', filename);
   
-  let data = await ejs.renderFile(pathName, {priceAlert, userEmail});
+  let data = await ejs.renderFile(pathName, { Product, userEmail });
 
   // send mail with defined transport object
   let info = await transporter.sendMail({

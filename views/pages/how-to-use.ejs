@@ -1,42 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <%- include("../partials/head.ejs");  %> 
-  </head>
-  <body
-    style="
-      background-image: url('images/person-with-clipboard-near-laptop-shopping-trolley-magnifier.jpg');
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-    "
-  >
-    <div class="container-fluid" style="backdrop-filter: blur(6px);">
-      <!-- NAVBAR -->
-      <%- include("../partials/navbar.ejs")  %>
-      <div class="row">
-        <div class="col-12">
-          <!-- HEADER -->
-          <%- include("../partials/header.ejs");  %> 
-        </div>
-      </div>
+  <!-- HEAD -->
+  <%- include("../partials/head.ejs"); %>
+  <body>
+    <!-- HEADER -->
+    <%- include("../partials/header.ejs"); %>
+    <div class="container-fluid py-5">
+      <!-- TITLE -->
+      <%- include("../partials/title.ejs"); %>
       <div class="row justify-content-center">
-        <p class="col-8 px-0 py-5 text-center text-primary fw-bold fs-5">
-          Here is some information on how to set-up a price alert correctly
+        <p
+          class="col-8 px-0 py-5 text-center text-decoration-underline fw-bold fs-5 redText"
+        >
+          Information on how to set-up a price alert correctly
         </p>
-      </div> 
-      <main class="row justify-content-center">
-        <p class="col-8 px-0 pb-2  text-dark">
-            Navigate to the BOOTS website and search for the product that you want to set-up the price alert. Click on the product to take you to the required product's page. 
+      </div>
+      <main class="row justify-content-center gap-4">
+        <p class="col-8 px-0 pb-2 text-dark">
+          Navigate to the BOOTS website and search for the product that you want
+          to set-up the price alert. Click on the product to take you to the
+          required product's page.
         </p>
-        <p class="col-8 px-0 pb-2  text-dark">
-            On the home page type in the product you want exactly as it is written on the website (brackets included), as shown in image below, highlighted in yellow <br> 
-            E.g: <span class="text-success fw-bold">Hawkins & Brimble Mens Daily Energizing Moisturiser (100ml)</span>
+        <p class="col-8 px-0 pb-2 text-dark">
+          On the home page type in the product you want exactly as it is written
+          on the website (brackets included), as shown in image below,
+          highlighted in yellow <br />
+          E.g:
+          <span class="text-success fw-bold"
+            >Hawkins & Brimble Mens Daily Energizing Moisturiser (100ml)</span
+          >
         </p>
-        <div class="col-8 py-5">
-            <img src="/images/boots-website.png" alt="boots website" class="img-thumbnail">
+        <div class="col-8 p-5 border border-2 border-dark product_showcase">
+          <img
+            src="/images/boots-website.png"
+            alt="boots website"
+            class="img-thumbnail border border-1 border-dark rounded-0"
+          />
         </div>
       </main>
     </div>
   </body>
 </html>
+
+<!-- style="
+background-image: url('images/person-with-clipboard-near-laptop-shopping-trolley-magnifier.jpg');
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+" -->

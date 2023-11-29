@@ -1,9 +1,12 @@
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-extra");
+const StealthPlugin = require("puppeteer-extra-plugin-stealth");
+
+puppeteer.use(StealthPlugin());
 
 const productSearched = async (searchItem) => {
 
   const url = "https://www.boots.com";
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
   page.setDefaultTimeout(50000);
   page.setDefaultNavigationTimeout(50000);

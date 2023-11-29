@@ -2,14 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Price Saver Alert</title>
     <style>
-      body {
+      #body {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        background-color: #EDDCD9;
+        width: 80%;
+        margin: 0 auto;
+        border: 5px outset #212529;
       }
 
       img {
@@ -43,11 +46,12 @@
       }
 
       h3 {
-        color: #0d6efd;
+        color: #DE5499;
         margin-bottom: 2rem;
         text-align: center;
         font-weight: 500;
         font-size: 1.75rem;
+        text-decoration: underline;
       }
 
       a {
@@ -58,16 +62,20 @@
 
       ul {
         padding: 0;
-        margin-top: 3rem;
+        margin: 0;
         list-style: none;
         text-align: center;
+      }
+
+      li {
+        width: fit-content;
+        margin: 0 auto;
       }
 
       .list {
         font-size: 1.25rem;
         font-weight: 600;
-        margin-bottom: 1rem;
-        padding: 0.2rem;
+        padding: 0 1rem;
       }
 
       .product-name {
@@ -79,7 +87,7 @@
       }
 
       .original-price {
-        color: #dc3545;
+        color: #DE5499;
         font-size: 1.25rem;
         margin-bottom: 1rem;
         padding: 0.2rem;
@@ -96,14 +104,18 @@
       }
 
       .offer {
-        border: 0.1rem solid #dc3545;
-        color: #dc3545;
+        border: 0.1rem solid #DE5499;
+        color: #DE5499;
         margin-bottom: 1rem;
         padding: 0.5rem 1rem;
+        font-weight: 700;
       }
 
       .current-price {
-        color: #0d6efd;
+        color: #fff;
+        background-color: #20c997;
+        border-radius: 16px;
+        padding: 10px 20px;
       }
 
       .status {
@@ -111,7 +123,7 @@
       }
 
       .instock {
-        color: #dc3545;
+        color: #DE5499;
       }
 
       .info {
@@ -122,7 +134,7 @@
       }
 
       .info-id {
-        color: #dc3545;
+        color: #E99F4C;
         text-align: center;
         font-size: 1.25rem;
       }
@@ -132,41 +144,56 @@
         font-size: 1.25rem;
         text-align: center;
       }
+
+      .showcase {
+        height: 400px;
+        width: 400px;
+        border: 5px inset #e99f4c
+      }
     </style>
   </head>
-  <body>
-    <header>
-      <h1>The Money Saving Helper</h1>
-      <p>Let's see whether we can make some savings today....</p>
+  <body id="body">
+    <header class="header">
+      <h1 class="title">The Money Saving Helper</h1>
+      <p class="intro">Let's see whether we can make some savings today....</p>
     </header>
-    <main>
+    <main class="main">
       <h3>Here is your search result:</h3>
-      <% if (priceAlert.previousPrice.length) { %>
+      <% if (Product.offer || Product.nectarOffer) { %>
       <p class="savings">
         Woo-hoo!!! This product is available to purchase at a lower price ££££
       </p>
       <% } %>
-      <img src="<%= priceAlert.imageUrl%>" alt="product image from Boots" />
+      <img
+        src="<%= Product.imageUrl %>"
+        alt="product image from Boots"
+        class="showcase"
+      />
       <ul>
-        <li class="product-name"><%= priceAlert.name %></li>
+        <li class="product-name"><%= Product.title %></li>
         <li class="list current-price">
-          Current Price: <%= priceAlert.currentPrice %>
+          Current Price: <%- Product.offer ? Product.retailPrice :
+          Product.nectarOffer ? Product.offerPrice : Product.retailPrice %>
         </li>
-        <% if (priceAlert.previousPrice.length) { %>
+        <% if (Product.retailPrice && Product.offerPrice) { %>
         <li class="original-price">
-          Previous Price: <%= priceAlert.previousPrice %>
+          Normal Price: <%- Product.offer ? Product.offerPrice :
+          Product.retailPrice %>
         </li>
-        <% } %> <% if (priceAlert.offer.length) { %>
-        <li class="offer">OFFER: <%= priceAlert.offer %></li>
-        <% } %> <% if (priceAlert.stockStatus === 'Add to basket') { %>
-        <li class="list status">In Stock</li>
-        <% } else { %>
-        <li class="list instock">Not In Stock</li>
+        <% } %>
+        <% if (Product.promotionMsg) { %>
+        <li class="offer">PROMOTION: <%= Product.promotionMsg %></li>
+        <% } %>
+        <% if (Product.nectarOffer) { %>
+        <li class="list status"><%= Product.nectarOffer %></li>
+        <% } %>
+        <% if (Product.offer) { %>
+        <li class="list instock"><%= Product.offer %></li>
         <% } %>
       </ul>
     </main>
     <p class="info">Below is the ID Number for the price alert you created:</p>
-    <p class="info-id"><%= priceAlert._id %></p>
+    <p class="info-id"><%= Product._id %></p>
     <p class="info-extra">
       (quote this number when you want to unsubscribe from this price alert)
     </p>

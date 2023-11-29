@@ -1,27 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <%- include("../partials/head.ejs") %>
-</head>
-<body>
-    <div class="container-fluid" style="backdrop-filter: blur(6px); height: 100%;">
-        <!-- NAVBAR -->
-        <%- include("../partials/navbar.ejs")  %>
-        <div class="row">
-            <div class="col-12">
-                <!-- HEADER -->
-                <%- include("../partials/header.ejs"); %>
-            </div>
-        </div>
-        <main class="row justify-content-center pt-5 gap-4">
-            <p class="col-12 text-center text-success fw-bold fs-5">
-            All done...you have successfully unsubscribed from the Price Alert that you set for: 
-            </p>  
-            <p class="col-12 text-center fs-5">
-            <%= priceAlert.name.toUpperCase() %> 
-            </p>
-            <img src="<%= priceAlert.imageUrl %>" alt="image of <%= priceAlert.name %> " style="height: 400px; width: 400px;"/>
-        </main>
-      </div>
-</body>
+  <!-- HEAD -->
+  <%- include("../partials/head.ejs") %>
+  <body>
+    <!-- HEADER -->
+    <%- include("../partials/header.ejs"); %>
+    <div
+      class="container-fluid d-flex flex-column justify-content-center pt-5 h-100"
+    >
+      <!-- TITLE -->
+      <%- include("../partials/title.ejs"); %>
+      <main class="row justify-content-center gap-4 pb-5">
+        <p
+          class="col-12 text-center text-success text-decoration-underline fw-bold fs-5"
+        >
+          All done...you have successfully unsubscribed from the Price Alert
+          that you set for:
+        </p>
+        <p class="col-12 text-center fs-5">
+          <%= deletedPriceAlert.title.toUpperCase() %>
+        </p>
+        <img
+          src="<%= deletedPriceAlert.imageUrl %>"
+          alt="<%= deletedPriceAlert.title %> "
+          style="height: 400px; width: 400px"
+          class="img-thumbnail border border-2 border-dark rounded product_showcase p-5"
+        />
+      </main>
+    </div>
+  </body>
 </html>
