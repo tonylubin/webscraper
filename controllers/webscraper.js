@@ -1,94 +1,88 @@
 const puppeteer = require("puppeteer-extra");
 const StealthPlugin = require("puppeteer-extra-plugin-stealth");
+const ShoppingItem = require('../models/product');
 
 puppeteer.use(StealthPlugin());
 
 const productSearched = async (searchItem) => {
 
-  const url = "https://www.boots.com";
+  const url = "https://www.sainsburys.co.uk/shop/gb/groceries";
+
+   // Launch the browser and open a new blank page
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
+  
   page.setDefaultTimeout(50000);
   page.setDefaultNavigationTimeout(50000);
   await page.goto(url);
- 
-  await page.waitForSelector("#onetrust-accept-btn-handler");
-  await page.click("#onetrust-accept-btn-handler");
- 
-  await page.waitForSelector("#AlgoliaSearchInput");
-  await page.type("#AlgoliaSearchInput", searchItem);
-  await Promise.all([page.waitForNavigation({waitUntil: "domcontentloaded"}), page.keyboard.press("Enter")]);
-
-  // A condition check - as sometimes page doesn't go to display search result page
-  let currentUrl = page.url().toLowerCase();
   
-  // grab 1st word in searched for product e.g. ["Kiehl's", "Facial", "Fuel", "Energizing" "Face", "Wash", "250ml"]
-  let searchTermArr = searchItem.split(" "); 
-  let textCondition = searchTermArr[0].toLowerCase().replace(/\W/g, "");
-  // example results page URL: "https://www.boots.com/sitesearch?searchTerm=Kiehls%20Facial%20Fuel%20Energizing%20Face%20Wash%20250ml"
-  // check condition includes string:  e.g. "searchterm=kiehls" 
-  // (N.B: in lowercase due to website using either upper/lower & removing punctuation)
-  if(!currentUrl.includes(`searchterm=${textCondition}`)) {
-    await page.type("#AlgoliaSearchInput", searchItem);
-    await Promise.all([page.waitForNavigation({waitUntil: "domcontentloaded"}), page.keyboard.press("Enter")]);
-  }
-  
-  const domId = ".estore_product_container";
-  await page.waitForSelector(domId);
-
-  let result = await page.evaluate(
-    (id, searchTerm) => {
-
-      // Array of items searched due to similarity (title website search)  
-      const itemDomIdArr = Array.from(document.querySelectorAll(id));
-
-      // Find exact product match (string)
-      const itemDomElement = itemDomIdArr.find((item) => {
-        return (
-          item.querySelector(".product_name").innerText.toLowerCase() ===
-          searchTerm.toLowerCase()
-        );
-      });
-
-      // get dom selector name/id for exact product (if returns similar product search results)
-      const findItemDomElementId =
-        itemDomIdArr.length > 1
-          ? `[data-productid="${itemDomElement.dataset.productid}"]`
-          : `.${itemDomElement.className}`;
-
-      // shortened dom id
-      const partDomId = `${findItemDomElementId} > .product_info-container > .product_info`;
-
-      // product details Object
-      const product = {
-        imageUrl: document
-          .querySelector(
-            `${findItemDomElementId} > .product_image > .image > .product_img_link > .product_img`
-          )
-          .getAttribute("src"),
-        name: document.querySelector(
-          `${findItemDomElementId} > .product_top_section > .product_name`
-        ).innerText,
-        currentPrice: document.querySelector(`${partDomId} > .product_price`)
-          .innerText,
-        previousPrice: document.querySelector(
-          `${partDomId} > .product_savePrice`
-        ).innerText,
-        offer: document.querySelector(
-          `${findItemDomElementId} > .product_offer`
-        ).innerText,
-        stockStatus: document.querySelector(
-          `${findItemDomElementId} > .product_info-container > .product_add`
-        ).innerText,
-      };
-      return product;
-    },
-    domId,        // arguments to parameters
-    searchItem   //  (id, searchTerm)
+  // handle cookies modal
+  const cookiesBtn = await page.waitForSelector(
+    "button::-p-text(Accept All Cookies)"
   );
+  await cookiesBtn.click();
+
+  // Enter product into search bar
+  const searchBar = await page.waitForSelector("#search");
+  await searchBar.type(searchItem);
+
+  await Promise.all([
+    page.waitForNavigation({ waitUntil: "load" }),
+    page.keyboard.press("Enter"),
+  ]);
+
+  // Click to product page
+  const productLink = await page.waitForSelector(".pt__link");
+  await Promise.all([
+    page.waitForNavigation({ waitUntil: "load" }),
+    productLink.click(),
+  ]);
+
+  // wait for image uploaded on page
+  await page.waitForSelector(".pd__image");
+
+  // Getting Info from searched product
+  // Using try/catch if dom element not available - handles thrown error 
+  const getProductInfo = async (selector, domProperty) => {
+    let productInfo;
+    try {
+      productInfo = await page.$eval(
+        selector,
+        (el, domAttribute) => {
+          return el[domAttribute];
+        },
+        domProperty // argument to params of eval function
+      );
+    } catch (error) {
+      console.log(error);
+      productInfo = "";
+    }
+    return productInfo;
+  };
+
+  // selectors for dom elements
+  const domRefs = {
+    title: "[role='main'] .pd__header",
+    offerPrice: "[role='main'] .pd__cost--price",
+    retailPrice: "[role='main'] .pd__cost__retail-price",
+    imageSrc: "[role='main'] .pd__image",
+    promotionMsg: "[role='main'] .promotion-message",
+    nectarOffer: "[role='main'] .promotional-tag--nectar",
+    offer: "[role='main'] .promotional-tag"
+  }
+
+  let Product = new ShoppingItem({
+    title: await getProductInfo(domRefs.title, "innerText"),
+    retailPrice: await getProductInfo(domRefs.retailPrice, "innerText"),
+    offerPrice: await getProductInfo(domRefs.offerPrice, "innerText"),
+    imageUrl: await getProductInfo(domRefs.imageSrc, "src"),
+    promotionMsg: await getProductInfo(domRefs.promotionMsg, "innerText"),
+    nectarOffer: await getProductInfo(domRefs.nectarOffer, "innerText"),
+    offer: await getProductInfo(domRefs.offer, "innerText")
+  });
 
   browser.close();
-  return result;
+  return { Product };
 };
 
 module.exports = productSearched;

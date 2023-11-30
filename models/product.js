@@ -1,18 +1,5 @@
 const mongoose = require('mongoose');
 
-// Boots website
-const ProductSchema = new mongoose.Schema({
-    imageUrl: {type: String, required: true},
-    name: {type: String, required: true},
-    currentPrice: {type : String, required: true},
-    previousPrice: {type : String},
-    offer: {type: String},
-    stockStatus: {type: String, required: true},
-    email: {type: String, required: true}
-}, {timestamps: true} );
-
-const Product = mongoose.model('Product', ProductSchema);
-
 // Sainsbury's website
 const ShopingItemSchema = new mongoose.Schema({
     title: {type: String, required: true},
@@ -27,4 +14,4 @@ const ShopingItemSchema = new mongoose.Schema({
 
 const ShoppingItem = mongoose.model('ShoppingItem', ShopingItemSchema);
 
-module.exports = { Product, ShoppingItem };
+module.exports = ShoppingItem;

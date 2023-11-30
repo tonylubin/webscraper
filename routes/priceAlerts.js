@@ -1,5 +1,5 @@
 const express = require("express");
-const productSearched = require("../controllers/webscraperAlt");
+const productSearched = require("../controllers/webscraper");
 const sendEmail = require("../controllers/mailer");
 const { ShoppingItem } = require("../models/product");
 
