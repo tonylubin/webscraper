@@ -20,7 +20,7 @@ I also have the possibility to get a reminder of the price alert(s) I have set-u
 <br>
 
 <div align="center">
-  <img src="public/images/price-alert-app.gif" alt="money saver app">
+  <img src="public/images/money-saver-demo.gif" alt="money saver app">
 </div>
 
 <br>
@@ -48,7 +48,7 @@ The app was designed entirely on the back-end using **Node Js** and with a serve
 <br>
 
 <div align="center">
-  <img src="public/images/price-alert-email.gif" alt="money saver app">
+  <img src="public/images/money-saver-email-demo.gif" alt="money saver app">
 </div>
 
 <br>

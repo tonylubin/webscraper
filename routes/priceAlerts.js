@@ -1,7 +1,7 @@
 const express = require("express");
 const productSearched = require("../controllers/webscraper");
 const sendEmail = require("../controllers/mailer");
-const { ShoppingItem } = require("../models/product");
+const ShoppingItem = require("../models/product");
 
 const router = express.Router();
 
@@ -44,7 +44,7 @@ router.post("/results-page-alt", async (req, res, next) => {
       
     await sendEmail("pages/email-results.ejs", { Product, userEmail })
       .then(() => {
-        res.status(200).render("pages/results-page-alt.ejs", { Product });
+        res.status(200).render("pages/results-page.ejs", { Product });
       })
 
   } catch (error) {

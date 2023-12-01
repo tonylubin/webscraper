@@ -1,66 +1,79 @@
-const cron = require('node-cron');
-const productSearched = require('./webscraper');
-const sendEmail = require('./mailer');
-const Product = require("../models/product");
+const cron = require("node-cron");
+const productSearched = require("./webscraper");
+const sendEmail = require("./mailer");
+const ShoppingItem = require("../models/product");
 
-
-//  function - fetch database (all items) 
+//  function - fetch database (get all documents from collection)
 const dbCheck = async () => {
-    return await Product.find();
+  return await ShoppingItem.find();
 };
 
 //  function - check if database is empty or not
 const setTaskStatus = async () => {
-    let db = await dbCheck();
-    let check = db.length > 0 ? "filled" : "empty";
-    return {check, db };
-}
-
-//  function - check if current(live) price is lower
-const priceCheck = async (productName) => {
-    let search = await productSearched(productName);
-    let searchCheck = search.previousPrice.length > 1 ? true : false;
-    let finalCheck = searchCheck === true ? search : null;
-    return finalCheck;
+  let db = await dbCheck();
+  let check = db.length > 0 ? "filled" : "empty";
+  return { check, db };
 };
 
-// Schedule: every day at 08.00 & 20.00 --> "0 08,20 * * *"
-const task = cron.schedule("0 08,20 * * *", async () => {
+//  function - check if current live item has price offer
+const priceCheck = async (productName) => {
+  let { Product } = await productSearched(productName);
+  let check = Product.offer || Product.nectarOffer ? true : false;
+  let finalCheck = check === true ? Product : null;
+  return finalCheck;
+};
 
+const runScheduleTask = async () => {
+  try {
     //  database items check
-    let itemsInDatabase = await setTaskStatus();
+    let { check, db } = await setTaskStatus();
 
-    if(itemsInDatabase.check === "empty") {
-        console.log("\x1b[34m%s\x1b[0m", "No price alerts found in the database."); // blue color msg
+    if (check === "empty") {
+      console.log(
+        "\x1b[34m%s\x1b[0m",
+        "No price alerts found in the database."
+      ); // blue msg
     }
 
-    if(itemsInDatabase.check === "filled") {
-        console.log("\x1b[32m%s\x1b[0m", "Price Alerts found."); // green color msg
-        (async function() {
-            for(const priceAlert of itemsInDatabase.db) {
-                await priceCheck(priceAlert.name)
-                .then((checked) => {
-                    if(checked !== null) {
-                        sendEmail('pages/email-results.ejs', { priceAlert: checked, userEmail: priceAlert.email });
-                        console.log("\x1b[33m%s\x1b[0m", "The price changed - a saving is to be made!!!");
-                    } else {
-                        console.log("\x1b[33m%s\x1b[0m", "The price is the same - No savings to be made."); // yellow color msg
-                    }
-                })
-                .catch((error) => {
-                    console.log("\x1b[31m%s\x1b[0m", "Something went wrong with trying to check if product was cheaper on website. ", error);
-                    // red color msg
-                    // add item to end of array to try again
-                    itemsInDatabase.db.push(priceAlert);
-                })
-            }
-        })();
+    if (check === "filled") {
+      console.log("\x1b[32m%s\x1b[0m", "Price Alerts found."); // green msg
+
+      for (const item of db) {
+        const priceAlert = await priceCheck(item.title);
+
+        if (priceAlert === null) {
+          console.log(
+            "\x1b[33m%s\x1b[0m",
+            "The price is the same - No savings to be made."
+          ); // yellow msg
+        } else {
+          sendEmail("pages/email-results.ejs", {
+            Product: priceAlert,
+            userEmail: item.email,
+          });
+          console.log(
+            "\x1b[33m%s\x1b[0m",
+            "The price changed - a saving is to be made!!!"
+          );
+        }
+      }
     }
-
-}, { scheduled: false, timezone: "Europe/London" });
-
-
-module.exports = task;
-
+  } catch (error) {
+    console.log(
+      "Something went wrong whilst trying to check the price alert!",
+      error
+    );
+  }
+};
 
 //  ***** for making cron expressions go to:  cronexpressiontogo.com *****
+// Schedule: every day at 20.00 --> "0 20 * * *"
+const cronTask = cron.schedule(
+  "0 20 * * *",
+  async () => {
+    await runScheduleTask();
+  },
+  { scheduled: false, timezone: "Europe/London" }
+);
+
+module.exports = cronTask;

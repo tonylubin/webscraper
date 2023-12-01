@@ -5,7 +5,8 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const mongoose = require("mongoose");
 const page_routes = require("./routes/priceAlerts");
-//  const task = require("./controllers/scheduler");
+const cronTask = require("./controllers/scheduler");
+
 
 // Initialise express app
 const app = express();
@@ -54,7 +55,7 @@ app.set("view engine", "ejs");
 app.use("/", page_routes);
 
 //  Task Scheduler (cron job) starting
-//  task.start();
+//  cronTask.start();
 
 //  ERROR HANDLING MIDDLEWARE
 app.use((error, req, res, _next) => {

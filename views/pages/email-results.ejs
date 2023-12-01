@@ -13,6 +13,7 @@
         width: 80%;
         margin: 0 auto;
         border: 5px outset #212529;
+        background-image: url('public/images/v883-mynt-04.jpg');
       }
 
       img {
@@ -95,7 +96,7 @@
       }
 
       .savings {
-        font-size: 1.25rem;
+        font-size: 1.5rem;
         font-weight: 600;
         color: #198754;
         margin-bottom: 3rem;
@@ -103,7 +104,7 @@
         text-align: center;
       }
 
-      .offer {
+      .promo {
         border: 0.1rem solid #DE5499;
         color: #DE5499;
         margin-bottom: 1rem;
@@ -118,12 +119,11 @@
         padding: 10px 20px;
       }
 
-      .status {
-        color: #198754;
-      }
-
-      .instock {
-        color: #DE5499;
+      .offer {
+        background-color: #8223fa;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
       }
 
       .info {
@@ -182,13 +182,13 @@
         </li>
         <% } %>
         <% if (Product.promotionMsg) { %>
-        <li class="offer">PROMOTION: <%= Product.promotionMsg %></li>
+        <li class="promo">PROMOTION: <%= Product.promotionMsg %></li>
         <% } %>
         <% if (Product.nectarOffer) { %>
-        <li class="list status"><%= Product.nectarOffer %></li>
+        <li class="list offer"><%= Product.nectarOffer %></li>
         <% } %>
         <% if (Product.offer) { %>
-        <li class="list instock"><%= Product.offer %></li>
+        <li class="list offer">Reduced Offer</li>
         <% } %>
       </ul>
     </main>
