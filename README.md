@@ -31,6 +31,8 @@ I also have the possibility to get a reminder of the price alert(s) I have set-u
 
 The app was designed entirely on the back-end using **Node Js** and with a server built using **Express** and using server-side rendering to deliver html pages to the client/browser with **EJS**.
 
+**NOTE:** - cron jobs on hosted cloud providers is fee-based, thus created scheduled task/script to run at user login to run locally instead. Decided on using a GUI instead of CLI for greater ease of use.
+
 <br>
 
 ### UI/DESIGN
