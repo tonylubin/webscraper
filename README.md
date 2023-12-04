@@ -3,7 +3,7 @@
 A web scraping app that allows you to create a price alert and sends
 an email, at set intervals, when the product becomes cheaper.
 
-Built this app as a personal project to develop my skills for the back-end using **Node Js** and as a way to get an email alert when the products that I regularly purchase on the Boots website become cheaper than the usual RRP.
+Built this app as a personal project to develop my skills for the back-end using **Node Js** and as a way to get an email alert when the products that I regularly purchase become cheaper than the usual RRP or are on offer.
 
 <br>
 
@@ -13,7 +13,7 @@ Built this app as a personal project to develop my skills for the back-end using
 
 <br>
 
-As a user I will look up a product that I would like to purchase on the Boots website. Then I will navigate to the the Money Saver App homepage and enter the product that I want to set-up the price alert for, as well as my email address for the price alert to be sent to. This is demonstrated on a "how to page".
+As a user I will look up a product that I would like to purchase on the Sainsbury's website. Then I will navigate to the the Money Saver App homepage and enter the product that I want to set-up the price alert for, as well as my email address for the price alert to be sent to. This is demonstrated on a "how to page".
 
 I also have the possibility to get a reminder of the price alert(s) I have set-up and the ability to delete any, all from the convenience of the website pages of the app.
 
@@ -29,7 +29,7 @@ I also have the possibility to get a reminder of the price alert(s) I have set-u
 
 ## APPROACH & OBJECTIVES
 
-The app was designed entirely on the back-end using **Node Js** and with a server built using **Express** and using server-side rendering to deliver html pages to the client/browser.
+The app was designed entirely on the back-end using **Node Js** and with a server built using **Express** and using server-side rendering to deliver html pages to the client/browser with **EJS**.
 
 <br>
 
@@ -39,7 +39,7 @@ The app was designed entirely on the back-end using **Node Js** and with a serve
 
 * Off-canvas Navigation menu (burger-style) with links to other website pages.
 
-* Form(s) as input for setting up price alert, reminder and unsubscription(deletion).
+* Form, with validation, as input for setting up price alert, reminder and unsubscription(deletion).
 
 * EJS - setting for the html template engine for server-side rendering with views (webpages) and partials (reusable code for pages).
 
@@ -57,7 +57,7 @@ The app was designed entirely on the back-end using **Node Js** and with a serve
 
 <br>
 
-**Note:** most functions/code is written in a asynchronous way with `async/await & .then` methods due to database calls and website scrapping data fetching.
+**Note:** most functions/code are written in a asynchronous way with `async/await` methods due to database calls and website scrapping data fetching.
 
 Use of same name and object destructuring throughout code in order to have consistent(same) variables to use across EJS html pages.  
 
@@ -91,11 +91,9 @@ Use of same name and object destructuring throughout code in order to have consi
 
 #### TASK SCHEDULER
 
-1. Node-cron - a module for creating scheduled tasks (cron jobs) at intervals as desired by developer.
+1. Node-cron - a module for creating scheduled tasks (cron jobs) at intervals as desired by the user. Runs twice a day and sends email to user if product is cheaper.
 
 2. Queries database to see if any price alerts exist. Then checks price of product(s) in database on website to see if it's cheaper using a `for of loop` for `async/await` proper functionality.
-
-3. Runs twice a day and sends email to user if product is cheaper.
 
 <br>
 
@@ -105,7 +103,7 @@ Use of same name and object destructuring throughout code in order to have consi
 
 1. Puppeteer - a node library that provides a browser instance that can be controlled programmatically and simulates what a user would normally do/interact with.
 
-2. Opens a headless-browser (non-gui). Provided URL navigates to website e.g. `www.boots.com`.
+2. Opens a headless-browser (non-gui). Provided URL navigates to website.
 
 3. Set default timeout timings to 50000ms to account for internet traffic/speed and buffer for function timming out.
 
@@ -128,7 +126,7 @@ Use of same name and object destructuring throughout code in order to have consi
 * POST Requests:
 
   * Price Alert creation - handling form data, take product and email inputs and call `productSearched()` function to webscrape the requested product. <br>Then create a new schema model instance from returned result, update it with user email address and `save()` it to the database.<br>
-  As function(s) are async use `.then()` to handle promise and send email to user and setting status code `200` response and sending corresponding success response webpage to the user.
+  Handle function promise and send email to user and setting status code `200` response and sending corresponding success response webpage to the user.
 
   * Price Alert reminder - query database with `Product.find()` mongoose method and send email with `sendMail()` callback function.
 
@@ -151,13 +149,13 @@ Clone down repo. You will need `npm` and `node` installed globally.<br>
 
 `npm install`
 
-FOR WINDOWS USE: windows branch: &nbsp; `git checkout windows`
+<!-- FOR WINDOWS USE: windows branch: &nbsp; `git checkout windows` -->
 
 ### To Start Server
 
 Linux: &nbsp; `npm run start`
 
-windows: &nbsp; `npm run windows`
+<!-- windows: &nbsp; `npm run windows` -->
 
 ### View Locally
 
@@ -206,7 +204,7 @@ As the app stores the price alerts in a database, you will need a *MongoDb* acco
 
 ## FURTHER INFO
 
-* To set your own schedule(time) to run the price comparison got to `controllers/scheduler.js` file and alter the cron expression that looks like ( * * * * * ) - <https://cronexpressiontogo.com> for info.
+* To set your own schedule(time) to run the price comparison go to `controllers/scheduler.js` file and alter the cron expression that looks like ( * * * * * ) - <https://cronexpressiontogo.com> for info.
 
 * utilised PM2 module for process managing (keeping server alive) and restarting automatically.<br> Install: `npm install pm2@latest -g`<br>
 WSL2 now uses *systemd* thus can now handle reboots without manual input each time user starts up WSL2 instance
@@ -216,7 +214,7 @@ WSL2 now uses *systemd* thus can now handle reboots without manual input each ti
 * Manual process: `pm2 start app.js` then `pm2 save`. After boot-up in terminal run `pm2 resurrect` for saved processess to resume
 This is needed because app is built on linux (using wsl2) and start-up script won't work across the different operating systems.
 
-**EXTRA FUTURE WORK :**
+**EXTRA FUTURE WORK:**
 
-* Look into hosting/deployment to a cloud hosting website service. Requires modifying `scheduler.js file` to remove cron job from `task()` function and then calling it at the required times.
+* Look into hosting/deployment to a cloud hosting website service. Requires modifying `scheduler.js file` to remove cron job from `task()` function and then calling it at the required times. (Most are paid for services)
 * Further info into running automated scripts for running program at user log in.
